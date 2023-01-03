@@ -9,7 +9,7 @@ create table discounts
 (
     discount_id   serial primary key,
     product_id    uuid not null references products (product_id),
-    amount_factor integer,
+    amount_factor numeric(8, 2),
     percentage    integer,
     check ( -- either amount or percentage based discount type
             (amount_factor is not null and percentage is null)
