@@ -1,0 +1,7 @@
+databaseChangeLog:
+    -   changeSet:
+            id: APP_DDL
+            author: akusiak
+            changes:
+                -   sqlFile:
+                        path: liquibase/sql/APP_DDL.sql

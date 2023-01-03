@@ -1,0 +1,4 @@
+databaseChangeLog:
+    -   include:
+            file: liquibase/changelog/init.yml
+            relativeToChangelogFile: false
