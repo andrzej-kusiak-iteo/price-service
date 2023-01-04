@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApplicationConstants.API_PREFIX + "price")
+@RequestMapping(ApplicationConstants.API_PREFIX + "/price")
 public record PriceController(
         PriceService service
 ) {
