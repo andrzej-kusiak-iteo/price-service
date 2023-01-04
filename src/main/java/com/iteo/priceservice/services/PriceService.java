@@ -9,12 +9,17 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 
 @Service
 public record PriceService(
         ProductRepository repository
 ) {
+
+    private static final int PERCENTAGE_SCALE = 2;
+    private static final int MONEY_SCALE = 2;
+    private static final MathContext MONEY_ROUNDING_MODE = new MathContext(MONEY_SCALE);
 
     public List<ProductResponse> calculateProductsPrice(List<ProductRequest> products) {
         return products.stream()
@@ -50,11 +55,11 @@ public record PriceService(
     }
 
     private static BigDecimal calculatePercentageBasedDiscount(BigDecimal basePrice, Integer percentage) {
-        return basePrice.multiply(BigDecimal.valueOf(percentage));
+        return basePrice.multiply(BigDecimal.valueOf(percentage, PERCENTAGE_SCALE), MONEY_ROUNDING_MODE);
     }
 
     private static BigDecimal calculateAmountBasedDiscount(Integer quantity, BigDecimal factor) {
-        return BigDecimal.valueOf(quantity).multiply(factor);
+        return BigDecimal.valueOf(quantity).multiply(factor, MONEY_ROUNDING_MODE);
     }
 
 }
