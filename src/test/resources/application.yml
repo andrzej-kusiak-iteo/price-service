@@ -1,4 +1,5 @@
 spring:
+    liquibase:
+        change-log: classpath:liquibase/master.yml
     datasource:
-        url: jdbc:tc:postgresql:9.6.8:///databasename
-        driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+        url: jdbc:tc:postgresql:15.1:///databasename
