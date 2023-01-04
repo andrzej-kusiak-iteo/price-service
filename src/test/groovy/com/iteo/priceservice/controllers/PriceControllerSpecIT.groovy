@@ -93,4 +93,21 @@ class PriceControllerSpecIT extends WebMvcSpecIT {
             .andExpect(jsonPath("\$.[0].field").value("products[0].quantity"))
     }
 
+    def "It should properly return bad request for quantity not positive"() {
+        when:
+        def result = mvc.perform(post(API_PREFIX + "/price")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    [
+                        {
+                            "productId": "1496f062-b1a9-4461-80bf-4daed33a5646",
+                            "quantity": -1
+                        }
+                    ]"""))
+        then:
+        result.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("\$.[0].message").value("must be greater than 0"))
+                .andExpect(jsonPath("\$.[0].field").value("products[0].quantity"))
+    }
+
 }
