@@ -9,7 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -19,7 +19,6 @@ public record PriceService(
 
     private static final int PERCENTAGE_SCALE = 2;
     private static final int MONEY_SCALE = 2;
-    private static final MathContext MONEY_ROUNDING_MODE = new MathContext(MONEY_SCALE);
 
     public List<ProductResponse> calculateProductsPrice(List<ProductRequest> products) {
         return products.stream()
@@ -28,6 +27,9 @@ public record PriceService(
     }
 
     private ProductResponse calculateProductPrice(ProductRequest productRequest) {
+        if (productRequest.quantity() <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive");
+        }
         Product product = repository.findById(productRequest.productId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id: %s not found", productRequest.productId())));
 
@@ -55,11 +57,11 @@ public record PriceService(
     }
 
     private static BigDecimal calculatePercentageBasedDiscount(BigDecimal basePrice, Integer percentage) {
-        return basePrice.multiply(BigDecimal.valueOf(percentage, PERCENTAGE_SCALE), MONEY_ROUNDING_MODE);
+        return basePrice.multiply(BigDecimal.valueOf(percentage, PERCENTAGE_SCALE)).setScale(MONEY_SCALE, RoundingMode.HALF_UP);
     }
 
     private static BigDecimal calculateAmountBasedDiscount(Integer quantity, BigDecimal factor) {
-        return BigDecimal.valueOf(quantity).multiply(factor, MONEY_ROUNDING_MODE);
+        return BigDecimal.valueOf(quantity).multiply(factor);
     }
 
 }
