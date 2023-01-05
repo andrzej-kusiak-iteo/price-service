@@ -8,6 +8,7 @@
 * [Technologies used](#technologies-used)
 * [Running application](#running-application)
 * [Docker image](#docker-image)
+* [Test data](#test-data)
 <!-- TOC -->
 
 ## Features
@@ -59,3 +60,8 @@ Application docker image can be generated using `jib`. Run `$ gradle jibDockerBu
 it to your local docker daemon with tag *latest*.
 
 Run app image with command `$ docker run -p 8080:8080 -e SPRING_DATASOURCE_URL=${DATABASE_URL} price-service`
+
+## Test data
+
+SQL script supplying example test data can be found on GitHub Wiki
+[data](https://github.com/andrzej-kusiak-iteo/price-service/wiki/Example-test-data).
